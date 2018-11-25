@@ -2,36 +2,28 @@ import os
 import util
 import numpy as np
 import math
+import tensorflow as tf
+from operator import sub, mul
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.logging.set_verbosity(tf.logging.ERROR)
 RANDOM_SEED = 1
-# np.random.seed(RANDOM_SEED)
 
-def increment(i):
-    return i+1
+data = np.arange(1, 100 + 1)
+data_input = tf.constant(data)
 
-def decrement(i):
-    return i-1
+batch_shuffle = tf.train.shuffle_batch([data_input], enqueue_many=True, batch_size=23, capacity=100, min_after_dequeue=10, allow_smaller_final_batch=True)
+batch_no_shuffle = tf.train.batch([data_input], enqueue_many=True, batch_size=23, capacity=100, allow_smaller_final_batch=True)
 
-def log(i):
-    return math.log(i, 10)
+with tf.Session() as sess:
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(coord=coord)
+    # for i in range(5):
+    print(sess.run([batch_no_shuffle]))
+    print(sess.run([batch_no_shuffle]))
+    print(sess.run([batch_no_shuffle]))
+    print(sess.run([batch_no_shuffle]))
+    print(sess.run([batch_no_shuffle]))
 
-operation = [increment, decrement, log]
-
-op = np.random.randint(2, size=(10))
-
-print(op)
-
-a = np.ones(10) * 10
-
-print(a)
-
-b = []
-
-for i in range(10):
-    b.append(operation[op[i]](a[i]))
-
-print(b)
-
-c = np.asarray([[1,2,3],[4,5,6]])
-d  = [[1,2,3],[4,5,6]]
-
-print(np.sum(d, 0))
+    coord.request_stop()
+    coord.join(threads)

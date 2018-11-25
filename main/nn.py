@@ -30,7 +30,7 @@ DEBUG_EPOCH_INTERVAL = 5 # Configurable
 TOTAL_CLASS = 25 # Configurable
 INPUT_LAYER = 30000 # Configurable
 LAYER_2 = 3000 # Configurable
-LAYER_3 = 300 # Configurable
+LAYER_3 = 800 # Configurable
 OUTPUT_LAYER = TOTAL_CLASS
 
 TEST_DATA_PATH = "../data/testing.npy"
@@ -104,14 +104,16 @@ for epoch in range(10000):
     y = train_label_onehot
 
     util.debug("Shuffle and get batch", DEBUG_EPOCH)
-    shuffle_order = np.arange(TOTAL_TRAIN_DATA)
-    np.random.shuffle(shuffle_order)
-    X_shuffle = X[shuffle_order]
-    X_batch = np.split(X_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
-    y_shuffle = y[shuffle_order]
-    y_batch = np.split(y_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
-    train_label_shuffle = train_label[shuffle_order]
-    train_label_batch = np.split(train_label_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
+    X_shuffle = tf.random.shuffle(X)
+
+    # shuffle_order = np.arange(TOTAL_TRAIN_DATA)
+    # np.random.shuffle(shuffle_order)
+    # X_shuffle = X[shuffle_order]
+    # X_batch = np.split(X_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
+    # y_shuffle = y[shuffle_order]
+    # y_batch = np.split(y_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
+    # train_label_shuffle = train_label[shuffle_order]
+    # train_label_batch = np.split(train_label_shuffle, BATCH_LIST) # batch size = (1000, 1000, 1000, 1728)
 
     for iteration in range(TOTAL_TRAIN_BATCH):
 
