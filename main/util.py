@@ -173,3 +173,18 @@ def saveTheta(theta, filepath, interval=(1, 1)):
 
     Theta_temp = np.asarray(theta)
     np.save(filepath, Theta_temp)
+
+# save tensorflow model to file
+def saveModel(saver, session, filepath, interval=(1, 1)):
+    if (not isInterval(interval)):
+        return
+
+    saver.save(session, filepath)
+
+# restore tensorflow model from file
+def restoreModel(saver, session, filepath, train_info_path):
+    exists = os.path.isfile(train_info_path)
+    if exists:
+        saver.restore(session, filepath)
+        return "Restore model."
+    return "No Stored model."
